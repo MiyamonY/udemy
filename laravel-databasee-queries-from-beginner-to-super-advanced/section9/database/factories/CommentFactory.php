@@ -19,7 +19,7 @@ class CommentFactory extends Factory
     {
         return [
             'content' => fake()->text(50),
-            'post_id' => mt_rand(1, Post::all()->count())
+            'post_id' => mt_rand(1, Post::all()->count()),
         ];
     }
 }
