@@ -73,14 +73,21 @@ Route::get('/', function () {
     // ])->find($item_id);
 
 
-    $post_tile = 'Volupatibus';
-    $post_content = 'Quidem';
+    // $post_tile = 'Volupatibus';
+    // $post_content = 'Quidem';
+
+    // $result = DB::table('posts')
+    //               ->where('title', 'like', "%$post_tile%")
+    //               ->orWhere('content', 'like', "%$post_content%")
+    //               // ->get();
+    //               ->paginate(10);
+
+    $search_term = '+Voluptatum -molestias';
 
     $result = DB::table('posts')
-                  ->where('title', 'like', "%$post_tile%")
-                  ->orWhere('content', 'like', "%$post_content%")
-                  // ->get();
-                  ->paginate(10);
+            ->whereRaw("MATCH(title, content) against (? in boolean mode)", [
+                $search_term
+            ])->get();
 
     dump($result);
 
