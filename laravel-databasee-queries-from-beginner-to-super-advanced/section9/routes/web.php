@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Comment;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,9 +36,24 @@ Route::get('/', function () {
     // dump($tags);
 
 
-    $latest_post = Post::select('id', 'title')->latest()->take(5)->withCount('comments')->get();
+    // $latest_post = Post::select('id', 'title')->latest()->take(5)->withCount('comments')->get();
 
-    dump($latest_post);
+    // $most_popular_post = Post::select('id', 'title')->orderByDesc(
+    //     Comment::selectRaw('count(post_id) as comment_count')
+    //     ->whereColumn('posts.id', 'comments.post_id')
+    //     ->orderBy('comment_count', 'desc')
+    //     ->limit(1)
+    // )->withCount('comments')->take(5)->get();
+
+
+    $most_active_users = User::select('id', 'name')->orderByDesc(
+        Post::selectRaw('count(user_id) as post_count')
+        ->whereColumn('users.id', 'posts.user_id')
+        ->orderBy('post_count', 'desc')
+        ->limit(1)
+    )->withCount('posts')->take(3)->get();
+
+    dump($most_active_users);
 
     return view('welcome');
 });
