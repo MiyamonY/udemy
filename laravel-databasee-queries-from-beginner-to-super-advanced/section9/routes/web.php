@@ -56,7 +56,7 @@ Route::get('/', function () {
 
     // $most_popular_category = Category::select('id', 'title')->withCount('comments')->orderBy('comments_count','desc')->take(1)->get();
 
-    $item_id = 3;
+    // $item_id = 3;
     // $result = Post::with('comments')->find($item_id);
 
     // $result = Tag::with([
@@ -65,12 +65,22 @@ Route::get('/', function () {
     //     }
     // ])->find($item_id);
 
-    $result = Category::with(
-        ['posts' =>
-         function($q){
-             $q->select('posts.id', 'posts.title', 'posts.category_id');
-         }
-    ])->find($item_id);
+    // $result = Category::with(
+    //     ['posts' =>
+    //      function($q){
+    //          $q->select('posts.id', 'posts.title', 'posts.category_id');
+    //      }
+    // ])->find($item_id);
+
+
+    $post_tile = 'Volupatibus';
+    $post_content = 'Quidem';
+
+    $result = DB::table('posts')
+                  ->where('title', 'like', "%$post_tile%")
+                  ->orWhere('content', 'like', "%$post_content%")
+                  // ->get();
+                  ->paginate(10);
 
     dump($result);
 
