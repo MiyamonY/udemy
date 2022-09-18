@@ -46,14 +46,17 @@ Route::get('/', function () {
     // )->withCount('comments')->take(5)->get();
 
 
-    $most_active_users = User::select('id', 'name')->orderByDesc(
-        Post::selectRaw('count(user_id) as post_count')
-        ->whereColumn('users.id', 'posts.user_id')
-        ->orderBy('post_count', 'desc')
-        ->limit(1)
-    )->withCount('posts')->take(3)->get();
+    // $most_active_users = User::select('id', 'name')->orderByDesc(
+    //     Post::selectRaw('count(user_id) as post_count')
+    //     ->whereColumn('users.id', 'posts.user_id')
+    //     ->orderBy('post_count', 'desc')
+    //     ->limit(1)
+    // )->withCount('posts')->take(3)->get();
 
-    dump($most_active_users);
+
+    $most_popular_category = Category::select('id', 'title')->withCount('comments')->orderBy('comments_count','desc')->take(1)->get();
+
+    dump($most_popular_category);
 
     return view('welcome');
 });
